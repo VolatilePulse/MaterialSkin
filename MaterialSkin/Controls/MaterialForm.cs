@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Drawing.Imaging;
     using System.Drawing.Text;
     using System.Linq;
     using System.Runtime.InteropServices;
@@ -102,12 +103,10 @@
 
                 if (DrawerTabControl != null)
                 {
-                    int H = ClientSize.Height - (STATUS_BAR_HEIGHT + ACTION_BAR_HEIGHT);
-                    int Y = PointToScreen(Point.Empty).Y + (STATUS_BAR_HEIGHT + ACTION_BAR_HEIGHT);
-                    drawerOverlay.Size = new Size(ClientSize.Width, H);
-                    drawerOverlay.Location = new Point(PointToScreen(Point.Empty).X, Y);
-                    drawerForm.Size = new Size(DrawerWidth, H);
-                    drawerForm.Location = new Point(PointToScreen(Point.Empty).X, Y);
+                    int Y = STATUS_BAR_HEIGHT + ACTION_BAR_HEIGHT;
+                    int height = ClientSize.Height - Y;
+                    drawerControl.Height = height;
+                    drawerControl.Location = new Point(drawerControl.Location.X, Y);
                 }
 
                 UpdateRects();
@@ -171,8 +170,7 @@
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
         private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
-        private Form drawerOverlay = new Form();
-        private Form drawerForm = new Form();
+        private FadeControl drawerOverlay = new FadeControl();
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -367,7 +365,14 @@
         }
 
         [Category("Drawer")]
-        public int DrawerWidth { get; set; }
+        public int DrawerWidth {
+            get => drawerControl?.Width ?? 0;
+            set
+            {
+                if (drawerControl == null) return;
+                drawerControl.Width = value;
+            }
+        }
 
         private bool _drawerAutoHide;
         [Category("Drawer")]
@@ -505,51 +510,26 @@
 
             _drawerShowHideAnimManager.OnAnimationProgress += (sender) =>
             {
-                drawerOverlay.Opacity = (float)(_drawerShowHideAnimManager.GetProgress() * 0.55f);
+                drawerOverlay.SetOpacity((int)(_drawerShowHideAnimManager.GetProgress() * 55), Color.Black);
             };
 
-            int H = ClientSize.Height - _statusBarBounds.Height - _actionBarBounds.Height;
-            int Y = PointToScreen(Point.Empty).Y + _statusBarBounds.Height + _actionBarBounds.Height;
+            int Y = _statusBarBounds.Height + _actionBarBounds.Height;
+            int height = ClientSize.Height - Y;
 
             // Overlay Form definitions
-            drawerOverlay.BackColor = Color.Black;
-            drawerOverlay.Opacity = 0;
-            drawerOverlay.MinimizeBox = false;
-            drawerOverlay.MaximizeBox = false;
-            drawerOverlay.Text = "";
-            drawerOverlay.ShowIcon = false;
-            drawerOverlay.ControlBox = false;
-            drawerOverlay.FormBorderStyle = FormBorderStyle.None;
-            drawerOverlay.Visible = true;
-            drawerOverlay.Size = new Size(ClientSize.Width, H);
-            drawerOverlay.Location = new Point(PointToScreen(Point.Empty).X, Y);
-            drawerOverlay.ShowInTaskbar = false;
-            drawerOverlay.Owner = this;
+            Controls.Add(drawerOverlay);
+            drawerOverlay.SetOpacity(0, Color.Black);
+            drawerOverlay.Size = new Size(ClientSize.Width, height);
+            drawerOverlay.Location = new Point(0, Y);
+            drawerOverlay.BringToFront();
             drawerOverlay.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 
-            // Drawer Form definitions
-            drawerForm.BackColor = Color.LimeGreen;
-            drawerForm.TransparencyKey = Color.LimeGreen;
-            drawerForm.MinimizeBox = false;
-            drawerForm.MaximizeBox = false;
-            drawerForm.Text = "";
-            drawerForm.ShowIcon = false;
-            drawerForm.ControlBox = false;
-            drawerForm.FormBorderStyle = FormBorderStyle.None;
-            drawerForm.Visible = true;
-            drawerForm.Size = new Size(DrawerWidth, H);
-            drawerForm.Location = new Point(PointToScreen(Point.Empty).X, Y);
-            drawerForm.ShowInTaskbar = false;
-            drawerForm.Owner = drawerOverlay;
-            drawerForm.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
-
             // Add drawer to overlay form
-            drawerForm.Controls.Add(drawerControl);
-            drawerControl.Location = new Point(0, 0);
-            drawerControl.Size = new Size(DrawerWidth, H);
-            drawerControl.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom);
+            Controls.Add(drawerControl);
+            drawerControl.Location = new Point(0, _statusBarBounds.Height + _actionBarBounds.Height);
+            drawerControl.Height = height;
             drawerControl.BaseTabControl = DrawerTabControl;
-            drawerControl.ShowIconsWhenHidden = true;
+            drawerControl.BringToFront();
 
             // Init Options
             drawerControl.IsOpen = DrawerIsOpen;
@@ -563,32 +543,17 @@
             // Changing colors or theme
             SkinManager.ThemeChanged += sender =>
             {
-                drawerForm.Refresh();
+                drawerControl.Refresh();
             };
             SkinManager.ColorSchemeChanged += sender =>
             {
-                drawerForm.Refresh();
-            };
-
-            // Visible, Resize and move events
-            VisibleChanged += (sender, e) =>
-            {
-                drawerForm.Visible = Visible;
-                drawerOverlay.Visible = Visible;
+                drawerControl.Refresh();
             };
 
             Resize += (sender, e) =>
             {
-                H = ClientSize.Height - _statusBarBounds.Height - _actionBarBounds.Height;
-                drawerForm.Size = new Size(DrawerWidth, H);
-                drawerOverlay.Size = new Size(ClientSize.Width, H);
-            };
-
-            Move += (sender, e) =>
-            {
-                Point pos = new Point(PointToScreen(Point.Empty).X, PointToScreen(Point.Empty).Y + _statusBarBounds.Height + _actionBarBounds.Height);
-                drawerForm.Location = pos;
-                drawerOverlay.Location = pos;
+                height = ClientSize.Height - _statusBarBounds.Height - _actionBarBounds.Height;
+                drawerControl.Height = height;
             };
 
             // Close when click outside menu
@@ -640,10 +605,6 @@
 
             drawerControl.DrawerShowIconsWhenHiddenChanged += FixFormPadding;
             FixFormPadding(this);
-
-            // Fix Closing the Drawer or Overlay form with Alt+F4 not exiting the app
-            drawerOverlay.FormClosed += TerminateOnClose;
-            drawerForm.FormClosed += TerminateOnClose;
         }
 
         private void TerminateOnClose(object sender, FormClosedEventArgs e)
@@ -747,7 +708,7 @@
                 }
             }
             else if (m.Msg == WM_LBUTTONUP)
-            {
+            { 
                 _headerMouseDown = false;
             }
         }
@@ -1223,6 +1184,132 @@
                 }
             }
             return false;
+        }
+    }
+
+    public static class Extensions
+    {
+        public static void SetOpacity(this FadeControl control, int opacity, Color baseColor)
+        {
+            control.Visible = opacity != 0;
+            control.BackColor = baseColor;
+            control.Opacity = opacity;
+        }
+    }
+
+    /// <summary>
+    /// <see href="https://stackoverflow.com/a/15655413/12478206">Reference</see></br>
+    /// Attempt to replace the form for a fade when the drawer is open.
+    /// </summary>
+    public class FadeControl : Control
+    {
+        private int _Opacity = 100;
+        private Bitmap backgroundBuffer;
+        private bool skipPaint;
+
+        public FadeControl()
+        {
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            //SetStyle(ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.DoubleBuffer |
+                     ControlStyles.AllPaintingInWmPaint |
+                     ControlStyles.UserPaint, true);
+        }
+
+        public int Opacity
+        {
+            get => _Opacity;
+            set
+            {
+                if (value < 0 || value > 100)
+                    throw new ArgumentException("value must be between 0 and 100");
+
+                Visible = value != 0;
+                _Opacity = value;
+
+                if (Parent != null)
+                    Parent.Invalidate(Bounds, true);
+            }
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e) { }
+
+        protected override void OnMove(EventArgs e) { RecreateHandle(); }
+
+        private void CreateBackgroundBuffer(Control parent)
+        {
+            GetOffsets(out int offsetX, out int offsetY, parent);
+            backgroundBuffer = new Bitmap(Width + offsetX, Height + offsetY);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            var parent = Parent;
+            if (parent != null)
+                CreateBackgroundBuffer(parent);
+            base.OnResize(e);
+        }
+
+        private void GetOffsets(out int offsetX, out int offsetY, Control parent)
+        {
+            var parentPosition = parent.PointToScreen(Point.Empty);
+            offsetY = Top + parentPosition.Y - parent.Top;
+            offsetX = Left + parentPosition.X - parent.Left;
+        }
+
+        private void UpdateBackgroundBuffer(int offsetX, int offsetY, Control parent)
+        {
+            if (backgroundBuffer == null)
+            {
+                CreateBackgroundBuffer(parent);
+            }
+            Rectangle parentBounds = new Rectangle(0, 0, Width + offsetX, Height + offsetY);
+            skipPaint = true;
+            parent.DrawToBitmap(backgroundBuffer, parentBounds);
+            skipPaint = false;
+        }
+
+        private void DrawBackground(Graphics graphics, Rectangle bounds)
+        {
+            GetOffsets(out int offsetX, out int offsetY, Parent);
+            UpdateBackgroundBuffer(offsetX, offsetY, Parent);
+            graphics.DrawImage(backgroundBuffer, bounds, offsetX, offsetY, Width, Height, GraphicsUnit.Pixel);
+        }
+
+        private void Draw(Graphics graphics)
+        {
+            Rectangle bounds = new Rectangle(0, 0, Width, Height);
+            DrawBackground(graphics, bounds);
+
+            if (BackColor == Color.Transparent) return;
+
+            using (Brush bckColor = new SolidBrush(Color.FromArgb((_Opacity * 255) / 100, BackColor)))
+            {
+                graphics.FillRectangle(bckColor, bounds);
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (skipPaint) return;
+
+            Graphics graphics = e.Graphics;
+            Draw(graphics);
+
+            Parent?.Invalidate();
+        }
+
+        protected override void OnBackColorChanged(EventArgs e)
+        {
+            Parent?.Invalidate(Bounds, true);
+
+            base.OnBackColorChanged(e);
+        }
+
+        protected override void OnParentBackColorChanged(EventArgs e)
+        {
+            Invalidate();
+            base.OnParentBackColorChanged(e);
         }
     }
 }
