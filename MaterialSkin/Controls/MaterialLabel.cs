@@ -144,7 +144,9 @@
                     Enabled ? HighEmphasis ? UseAccent ?
                     SkinManager.ColorScheme.AccentColor : // High emphasis, accent
                     SkinManager.ColorScheme.PrimaryColor : // High emphasis, primary
-                    SkinManager.TextHighEmphasisColor : // Normal
+                    (SkinManager.Theme == MaterialSkin.MaterialSkinManager.Themes.LIGHT) ?
+                    SkinManager.ColorScheme.PrimaryColor : // High emphasis, primary Light theme
+                    SkinManager.ColorScheme.PrimaryColor.Lighten(0.25f) : // High emphasis, primary Dark theme
                     SkinManager.TextDisabledOrHintColor, // Disabled
                     ClientRectangle.Location,
                     ClientRectangle.Size,
@@ -155,7 +157,6 @@
         protected override void InitLayout()
         {
             Font = SkinManager.getFontByType(_fontType);
-            BackColorChanged += (sender, args) => Refresh();
         }
     }
 }

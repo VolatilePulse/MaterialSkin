@@ -101,6 +101,7 @@ namespace MaterialSkinExample
             this.materialButton11 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton10 = new MaterialSkin.Controls.MaterialButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.msReadOnly = new MaterialSkin.Controls.MaterialSwitch();
             this.materialComboBox6 = new MaterialSkin.Controls.MaterialComboBox();
             this.materialComboBox2 = new MaterialSkin.Controls.MaterialComboBox();
             this.materialComboBox5 = new MaterialSkin.Controls.MaterialComboBox();
@@ -125,8 +126,10 @@ namespace MaterialSkinExample
             this.materialCheckBox6 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckBox5 = new MaterialSkin.Controls.MaterialCheckbox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.materialMaskedTextBox1 = new MaterialSkin.Controls.MaterialMaskedTextBox();
             this.materialSwitch15 = new MaterialSkin.Controls.MaterialSwitch();
             this.materialSwitch14 = new MaterialSkin.Controls.MaterialSwitch();
+            this.materialSwitch16 = new MaterialSkin.Controls.MaterialSwitch();
             this.materialSwitch13 = new MaterialSkin.Controls.MaterialSwitch();
             this.materialComboBox7 = new MaterialSkin.Controls.MaterialComboBox();
             this.materialSwitch12 = new MaterialSkin.Controls.MaterialSwitch();
@@ -218,8 +221,6 @@ namespace MaterialSkinExample
             this.item2ToolStripMenuItem = new MaterialSkin.Controls.MaterialToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.item3ToolStripMenuItem = new MaterialSkin.Controls.MaterialToolStripMenuItem();
-            this.msReadOnly = new MaterialSkin.Controls.MaterialSwitch();
-            this.materialMaskedTextBox1 = new MaterialSkin.Controls.MaterialMaskedTextBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -1166,6 +1167,23 @@ namespace MaterialSkinExample
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Selection Controls";
             // 
+            // msReadOnly
+            // 
+            this.msReadOnly.AutoSize = true;
+            this.msReadOnly.Depth = 0;
+            this.msReadOnly.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.msReadOnly.Location = new System.Drawing.Point(237, 125);
+            this.msReadOnly.Margin = new System.Windows.Forms.Padding(0);
+            this.msReadOnly.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.msReadOnly.MouseState = MaterialSkin.MouseState.HOVER;
+            this.msReadOnly.Name = "msReadOnly";
+            this.msReadOnly.Ripple = true;
+            this.msReadOnly.Size = new System.Drawing.Size(130, 37);
+            this.msReadOnly.TabIndex = 75;
+            this.msReadOnly.Text = "Read Only";
+            this.msReadOnly.UseVisualStyleBackColor = true;
+            this.msReadOnly.CheckedChanged += new System.EventHandler(this.MsReadOnly_CheckedChanged);
+            // 
             // materialComboBox6
             // 
             this.materialComboBox6.AutoResize = false;
@@ -1757,6 +1775,7 @@ namespace MaterialSkinExample
             this.tabPage3.Controls.Add(this.materialMaskedTextBox1);
             this.tabPage3.Controls.Add(this.materialSwitch15);
             this.tabPage3.Controls.Add(this.materialSwitch14);
+            this.tabPage3.Controls.Add(this.materialSwitch16);
             this.tabPage3.Controls.Add(this.materialSwitch13);
             this.tabPage3.Controls.Add(this.materialComboBox7);
             this.tabPage3.Controls.Add(this.materialSwitch12);
@@ -1780,6 +1799,48 @@ namespace MaterialSkinExample
             this.tabPage3.Size = new System.Drawing.Size(1015, 520);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Textbox";
+            // 
+            // materialMaskedTextBox1
+            // 
+            this.materialMaskedTextBox1.AllowPromptAsInput = true;
+            this.materialMaskedTextBox1.AsciiOnly = false;
+            this.materialMaskedTextBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.materialMaskedTextBox1.BeepOnError = false;
+            this.materialMaskedTextBox1.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludeLiterals;
+            this.materialMaskedTextBox1.Depth = 0;
+            this.materialMaskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialMaskedTextBox1.HidePromptOnLeave = true;
+            this.materialMaskedTextBox1.HideSelection = false;
+            this.materialMaskedTextBox1.Hint = "Phone number mask";
+            this.materialMaskedTextBox1.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Default;
+            this.materialMaskedTextBox1.LeadingIcon = global::MaterialSkinExample.Properties.Resources.round_phone_black_24dp;
+            this.materialMaskedTextBox1.Location = new System.Drawing.Point(528, 437);
+            this.materialMaskedTextBox1.Mask = "+00-0-00-00-00-00";
+            this.materialMaskedTextBox1.MaxLength = 32767;
+            this.materialMaskedTextBox1.MouseState = MaterialSkin.MouseState.OUT;
+            this.materialMaskedTextBox1.Name = "materialMaskedTextBox1";
+            this.materialMaskedTextBox1.PasswordChar = '\0';
+            this.materialMaskedTextBox1.PrefixSuffixText = null;
+            this.materialMaskedTextBox1.PromptChar = '_';
+            this.materialMaskedTextBox1.ReadOnly = false;
+            this.materialMaskedTextBox1.RejectInputOnFirstFailure = true;
+            this.materialMaskedTextBox1.ResetOnPrompt = true;
+            this.materialMaskedTextBox1.ResetOnSpace = true;
+            this.materialMaskedTextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.materialMaskedTextBox1.SelectedText = "";
+            this.materialMaskedTextBox1.SelectionLength = 0;
+            this.materialMaskedTextBox1.SelectionStart = 15;
+            this.materialMaskedTextBox1.ShortcutsEnabled = true;
+            this.materialMaskedTextBox1.Size = new System.Drawing.Size(384, 48);
+            this.materialMaskedTextBox1.SkipLiterals = true;
+            this.materialMaskedTextBox1.TabIndex = 81;
+            this.materialMaskedTextBox1.TabStop = false;
+            this.materialMaskedTextBox1.Text = "+  - -  -  -  -";
+            this.materialMaskedTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.materialMaskedTextBox1.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludeLiterals;
+            this.materialMaskedTextBox1.TrailingIcon = null;
+            this.materialMaskedTextBox1.UseSystemPasswordChar = false;
+            this.materialMaskedTextBox1.ValidatingType = null;
             // 
             // materialSwitch15
             // 
@@ -1812,6 +1873,24 @@ namespace MaterialSkinExample
             this.materialSwitch14.Text = "Leading Icon";
             this.materialSwitch14.UseVisualStyleBackColor = true;
             this.materialSwitch14.CheckedChanged += new System.EventHandler(this.materialSwitch14_CheckedChanged);
+            // 
+            // materialSwitch16
+            // 
+            this.materialSwitch16.AutoSize = true;
+            this.materialSwitch16.Checked = true;
+            this.materialSwitch16.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.materialSwitch16.Depth = 0;
+            this.materialSwitch16.Location = new System.Drawing.Point(729, 295);
+            this.materialSwitch16.Margin = new System.Windows.Forms.Padding(0);
+            this.materialSwitch16.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.materialSwitch16.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialSwitch16.Name = "materialSwitch16";
+            this.materialSwitch16.Ripple = true;
+            this.materialSwitch16.Size = new System.Drawing.Size(200, 37);
+            this.materialSwitch16.TabIndex = 76;
+            this.materialSwitch16.Text = "Show Assistive Text";
+            this.materialSwitch16.UseVisualStyleBackColor = true;
+            this.materialSwitch16.CheckedChanged += new System.EventHandler(this.materialSwitch16_CheckedChanged);
             // 
             // materialSwitch13
             // 
@@ -1914,7 +1993,9 @@ namespace MaterialSkinExample
             this.materialTextBox21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.materialTextBox21.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
             this.materialTextBox21.Depth = 0;
+            this.materialTextBox21.ErrorMessage = "Invalid entry";
             this.materialTextBox21.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialTextBox21.HelperText = "Helper Text";
             this.materialTextBox21.HideSelection = true;
             this.materialTextBox21.LeadingIcon = null;
             this.materialTextBox21.Location = new System.Drawing.Point(528, 114);
@@ -1929,6 +2010,7 @@ namespace MaterialSkinExample
             this.materialTextBox21.SelectionLength = 0;
             this.materialTextBox21.SelectionStart = 0;
             this.materialTextBox21.ShortcutsEnabled = true;
+            this.materialTextBox21.ShowAssistiveText = true;
             this.materialTextBox21.Size = new System.Drawing.Size(384, 48);
             this.materialTextBox21.TabIndex = 71;
             this.materialTextBox21.TabStop = false;
@@ -1941,19 +2023,28 @@ namespace MaterialSkinExample
             // 
             // materialMultiLineTextBox21
             // 
+            this.materialMultiLineTextBox21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.materialMultiLineTextBox21.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.materialMultiLineTextBox21.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.materialMultiLineTextBox21.Depth = 0;
+            this.materialMultiLineTextBox21.HideSelection = true;
             this.materialMultiLineTextBox21.Hint = "MaterialMultiLineTextBox2";
             this.materialMultiLineTextBox21.Location = new System.Drawing.Point(25, 385);
             this.materialMultiLineTextBox21.MaxLength = 2147483647;
             this.materialMultiLineTextBox21.MouseState = MaterialSkin.MouseState.OUT;
             this.materialMultiLineTextBox21.Name = "materialMultiLineTextBox21";
+            this.materialMultiLineTextBox21.PasswordChar = '\0';
             this.materialMultiLineTextBox21.ReadOnly = false;
+            this.materialMultiLineTextBox21.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.materialMultiLineTextBox21.SelectedText = "";
             this.materialMultiLineTextBox21.SelectionLength = 0;
             this.materialMultiLineTextBox21.SelectionStart = 0;
+            this.materialMultiLineTextBox21.ShortcutsEnabled = true;
             this.materialMultiLineTextBox21.Size = new System.Drawing.Size(406, 100);
             this.materialMultiLineTextBox21.TabIndex = 70;
             this.materialMultiLineTextBox21.TabStop = false;
+            this.materialMultiLineTextBox21.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.materialMultiLineTextBox21.UseSystemPasswordChar = false;
             // 
             // materialTextBox5
             // 
@@ -3206,65 +3297,6 @@ namespace MaterialSkinExample
             this.item3ToolStripMenuItem.Size = new System.Drawing.Size(170, 30);
             this.item3ToolStripMenuItem.Text = "Item 3";
             // 
-            // msReadOnly
-            // 
-            this.msReadOnly.AutoSize = true;
-            this.msReadOnly.Depth = 0;
-            this.msReadOnly.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.msReadOnly.Location = new System.Drawing.Point(237, 125);
-            this.msReadOnly.Margin = new System.Windows.Forms.Padding(0);
-            this.msReadOnly.MouseLocation = new System.Drawing.Point(-1, -1);
-            this.msReadOnly.MouseState = MaterialSkin.MouseState.HOVER;
-            this.msReadOnly.Name = "msReadOnly";
-            this.msReadOnly.Ripple = true;
-            this.msReadOnly.Size = new System.Drawing.Size(130, 37);
-            this.msReadOnly.TabIndex = 75;
-            this.msReadOnly.Text = "Read Only";
-            this.msReadOnly.UseVisualStyleBackColor = true;
-            this.msReadOnly.CheckedChanged += new System.EventHandler(this.MsReadOnly_CheckedChanged);
-            // 
-            // materialMaskedTextBox1
-            // 
-            this.materialMaskedTextBox1.AllowPromptAsInput = true;
-            this.materialMaskedTextBox1.AsciiOnly = false;
-            this.materialMaskedTextBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.materialMaskedTextBox1.BeepOnError = false;
-            this.materialMaskedTextBox1.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludeLiterals;
-            this.materialMaskedTextBox1.Depth = 0;
-            this.materialMaskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialMaskedTextBox1.HidePromptOnLeave = true;
-            this.materialMaskedTextBox1.HideSelection = false;
-            this.materialMaskedTextBox1.Hint = "Phone number mask";
-            this.materialMaskedTextBox1.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Default;
-            this.materialMaskedTextBox1.LeadingIcon = global::MaterialSkinExample.Properties.Resources.round_phone_black_24dp;
-            this.materialMaskedTextBox1.Location = new System.Drawing.Point(528, 437);
-            this.materialMaskedTextBox1.Mask = "+00-0-00-00-00-00";
-            this.materialMaskedTextBox1.MaxLength = 32767;
-            this.materialMaskedTextBox1.MouseState = MaterialSkin.MouseState.OUT;
-            this.materialMaskedTextBox1.Name = "materialMaskedTextBox1";
-            this.materialMaskedTextBox1.PasswordChar = '\0';
-            this.materialMaskedTextBox1.PrefixSuffixText = null;
-            this.materialMaskedTextBox1.PromptChar = '_';
-            this.materialMaskedTextBox1.ReadOnly = false;
-            this.materialMaskedTextBox1.RejectInputOnFirstFailure = true;
-            this.materialMaskedTextBox1.ResetOnPrompt = true;
-            this.materialMaskedTextBox1.ResetOnSpace = true;
-            this.materialMaskedTextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.materialMaskedTextBox1.SelectedText = "";
-            this.materialMaskedTextBox1.SelectionLength = 0;
-            this.materialMaskedTextBox1.SelectionStart = 0;
-            this.materialMaskedTextBox1.ShortcutsEnabled = true;
-            this.materialMaskedTextBox1.Size = new System.Drawing.Size(384, 48);
-            this.materialMaskedTextBox1.SkipLiterals = true;
-            this.materialMaskedTextBox1.TabIndex = 81;
-            this.materialMaskedTextBox1.TabStop = false;
-            this.materialMaskedTextBox1.Text = "+  - -  -  -  -";
-            this.materialMaskedTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.materialMaskedTextBox1.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludeLiterals;
-            this.materialMaskedTextBox1.TrailingIcon = null;
-            this.materialMaskedTextBox1.UseSystemPasswordChar = false;
-            this.materialMaskedTextBox1.ValidatingType = null;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3277,6 +3309,7 @@ namespace MaterialSkinExample
             this.DrawerTabControl = this.materialTabControl1;
             this.MinimumSize = new System.Drawing.Size(300, 200);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MaterialSkin Demo";
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -3481,5 +3514,6 @@ namespace MaterialSkinExample
         private MaterialMaskedTextBox materialMaskedTextBox1;
         private MaterialButton materialButton25;
         private MaterialLabel materialLabel57;
+        private MaterialSwitch materialSwitch16;
     }
 }

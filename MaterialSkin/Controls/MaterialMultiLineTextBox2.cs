@@ -151,6 +151,19 @@ using MaterialSkin.Animations;
             }
         }
 
+        private bool _animateReadOnly;
+
+        [Category("Material Skin")]
+        [Browsable(true)]
+        public bool AnimateReadOnly
+        {
+            get => _animateReadOnly;
+            set
+            {
+                _animateReadOnly = value;
+                Invalidate();
+            }
+        }
 
         public void SelectAll() { baseTextBox.SelectAll(); }
 
@@ -287,6 +300,7 @@ using MaterialSkin.Animations;
             }
         }
 
+        #if NETFRAMEWORK
         public new event EventHandler ContextMenuChanged
         {
             add
@@ -298,6 +312,7 @@ using MaterialSkin.Animations;
                 baseTextBox.ContextMenuChanged -= value;
             }
         }
+        #endif
 
         public new event EventHandler ContextMenuStripChanged
         {
@@ -1140,6 +1155,7 @@ using MaterialSkin.Animations;
             };
 
             baseTextBox.TextChanged += new EventHandler(Redraw);
+            baseTextBox.BackColorChanged += new EventHandler(Redraw);
 
             baseTextBox.TabStop = true;
             this.TabStop = false;
@@ -1151,7 +1167,9 @@ using MaterialSkin.Animations;
 
         private void Redraw(object sencer, EventArgs e)
         {
+            SuspendLayout();
             Invalidate();
+            ResumeLayout(false);
         }
 
         protected override void OnPaint(PaintEventArgs pevent)
@@ -1165,36 +1183,39 @@ using MaterialSkin.Animations;
             g.FillRectangle(
                 !Enabled ? SkinManager.BackgroundDisabledBrush : // Disabled
                 isFocused ? SkinManager.BackgroundFocusBrush :  // Focused
-                MouseState == MouseState.HOVER ? SkinManager.BackgroundHoverBrush : // Hover
+                MouseState == MouseState.HOVER && (!ReadOnly || (ReadOnly && !AnimateReadOnly)) ? SkinManager.BackgroundHoverBrush : // Hover
                 backBrush, // Normal
                 ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, LINE_Y);
 
             baseTextBox.BackColor = !Enabled ? ColorHelper.RemoveAlpha(SkinManager.BackgroundDisabledColor, BackColor) : //Disabled
                 isFocused ? DrawHelper.BlendColor(BackColor, SkinManager.BackgroundFocusColor, SkinManager.BackgroundFocusColor.A) : //Focused
-                MouseState == MouseState.HOVER ? DrawHelper.BlendColor(BackColor, SkinManager.BackgroundHoverColor, SkinManager.BackgroundHoverColor.A) : // Hover
+                MouseState == MouseState.HOVER && (!ReadOnly || (ReadOnly && !AnimateReadOnly)) ? DrawHelper.BlendColor(BackColor, SkinManager.BackgroundHoverColor, SkinManager.BackgroundHoverColor.A) : // Hover
                 DrawHelper.BlendColor(BackColor, SkinManager.BackgroundAlternativeColor, SkinManager.BackgroundAlternativeColor.A); // Normal
 
             // bottom line base
             g.FillRectangle(SkinManager.DividersAlternativeBrush, 0, LINE_Y, Width, 1);
 
-            if (!_animationManager.IsAnimating())
+            if (ReadOnly == false || (ReadOnly && AnimateReadOnly))
             {
-                // bottom line
-                if (isFocused)
-                { 
-                    //No animation
-                    g.FillRectangle(isFocused ? UseAccent ? SkinManager.ColorScheme.AccentBrush : SkinManager.ColorScheme.PrimaryBrush : SkinManager.DividersBrush, 0, LINE_Y, Width, isFocused ? 2 : 1);
+                if (!_animationManager.IsAnimating())
+                {
+                    // bottom line
+                    if (isFocused)
+                    {
+                        //No animation
+                        g.FillRectangle(isFocused ? UseAccent ? SkinManager.ColorScheme.AccentBrush : SkinManager.ColorScheme.PrimaryBrush : SkinManager.DividersBrush, 0, LINE_Y, Width, isFocused ? 2 : 1);
+                    }
                 }
-            }
-            else
-            {
-                // Animate - Focus got/lost
-                double animationProgress = _animationManager.GetProgress();
+                else
+                {
+                    // Animate - Focus got/lost
+                    double animationProgress = _animationManager.GetProgress();
 
-                // Line Animation
-                int LineAnimationWidth = (int)(Width * animationProgress);
-                int LineAnimationX = (Width / 2) - (LineAnimationWidth / 2);
-                g.FillRectangle(UseAccent ? SkinManager.ColorScheme.AccentBrush : SkinManager.ColorScheme.PrimaryBrush, LineAnimationX, LINE_Y, LineAnimationWidth, 2);
+                    // Line Animation
+                    int LineAnimationWidth = (int)(Width * animationProgress);
+                    int LineAnimationX = (Width / 2) - (LineAnimationWidth / 2);
+                    g.FillRectangle(UseAccent ? SkinManager.ColorScheme.AccentBrush : SkinManager.ColorScheme.PrimaryBrush, LineAnimationX, LINE_Y, LineAnimationWidth, 2);
+                }
             }
         }
 
