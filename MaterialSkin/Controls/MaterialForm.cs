@@ -386,7 +386,7 @@ namespace MaterialSkin.Controls
         private Point _animationSource;
         private Padding originalPadding;
 
-        private Form drawerOverlay = new Form();
+        private DrawerScrim drawerOverlay;
         private Form drawerForm = new Form();
 
         // Drawer overlay and speed improvements
@@ -454,29 +454,16 @@ namespace MaterialSkin.Controls
                 Increment = 0.04
             };
 
+            // Overlay Form definitions
+            drawerOverlay = new DrawerScrim(this);
+
             _drawerShowHideAnimManager.OnAnimationProgress += (sender) =>
             {
-                drawerOverlay.Opacity = (float)(_drawerShowHideAnimManager.GetProgress() * 0.55f);
+                drawerOverlay.Opacity = _drawerShowHideAnimManager.GetProgress() * 0.55;
             };
 
             int H = ClientSize.Height - _statusBarBounds.Height - _actionBarBounds.Height;
             int Y = PointToScreen(Point.Empty).Y + _statusBarBounds.Height + _actionBarBounds.Height;
-
-            // Overlay Form definitions
-            drawerOverlay.BackColor = Color.Black;
-            drawerOverlay.Opacity = 0;
-            drawerOverlay.MinimizeBox = false;
-            drawerOverlay.MaximizeBox = false;
-            drawerOverlay.Text = "";
-            drawerOverlay.ShowIcon = false;
-            drawerOverlay.ControlBox = false;
-            drawerOverlay.FormBorderStyle = FormBorderStyle.None;
-            drawerOverlay.Visible = true;
-            drawerOverlay.Size = new Size(ClientSize.Width, H);
-            drawerOverlay.Location = new Point(PointToScreen(Point.Empty).X, Y);
-            drawerOverlay.ShowInTaskbar = false;
-            drawerOverlay.Owner = this;
-            drawerOverlay.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 
             // Drawer Form definitions
             drawerForm.BackColor = Color.LimeGreen;
@@ -532,14 +519,12 @@ namespace MaterialSkin.Controls
             {
                 H = ClientSize.Height - _statusBarBounds.Height - _actionBarBounds.Height;
                 drawerForm.Size = new Size(DrawerWidth, H);
-                drawerOverlay.Size = new Size(ClientSize.Width, H);
             };
 
             Move += (sender, e) =>
             {
                 Point pos = new Point(PointToScreen(Point.Empty).X, PointToScreen(Point.Empty).Y + _statusBarBounds.Height + _actionBarBounds.Height);
                 drawerForm.Location = pos;
-                drawerOverlay.Location = pos;
             };
 
             // Close when click outside menu
@@ -593,7 +578,6 @@ namespace MaterialSkin.Controls
             FixFormPadding(this);
 
             // Fix Closing the Drawer or Overlay form with Alt+F4 not exiting the app
-            drawerOverlay.FormClosed += TerminateOnClose;
             drawerForm.FormClosed += TerminateOnClose;
         }
 

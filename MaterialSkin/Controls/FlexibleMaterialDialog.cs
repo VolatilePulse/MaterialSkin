@@ -813,7 +813,12 @@ namespace MaterialSkin.Controls
             SetDialogStartPosition(FlexibleMaterialForm, owner);
 
             //Show the dialog
-            return FlexibleMaterialForm.ShowDialog(owner);
+            var form = owner as Form;
+
+            form?.ShowScrim();
+            var dialogResult = FlexibleMaterialForm.ShowDialog(owner);
+            form?.HideScrim();
+            return dialogResult;
         }
 
         private void FlexibleMaterialForm_Load(object sender, EventArgs e)
