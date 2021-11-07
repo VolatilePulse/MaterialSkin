@@ -339,6 +339,27 @@
             }
         }
 
+        private bool _leaveOnEnterKey;
+
+        [Category("Material Skin"), DefaultValue(false), Description("Select next control which have TabStop property set to True when enter key is pressed.")]
+        public bool LeaveOnEnterKey
+        {
+            get => _leaveOnEnterKey;
+            set
+            {
+                _leaveOnEnterKey = value;
+                if (value)
+                {
+                    baseTextBox.KeyDown += new KeyEventHandler(LeaveOnEnterKey_KeyDown);
+                }
+                else
+                {
+                    baseTextBox.KeyDown -= LeaveOnEnterKey_KeyDown;
+                }
+                Invalidate();
+            }
+        }
+
         public void SelectAll() { baseTextBox.SelectAll(); }
 
         public void Clear() { baseTextBox.Clear(); }
@@ -1421,10 +1442,6 @@
                 _animationManager.StartNewAnimation(AnimationDirection.Out);
                 UpdateRects();
             };
-            EnabledChanged += (sender, args) =>
-            {
-                baseTextBox.Enabled = Enabled;
-            };
             
             baseTextBox.TextChanged += new EventHandler(Redraw);
             baseTextBox.BackColorChanged += new EventHandler(Redraw);
@@ -1708,8 +1725,7 @@
 
         }
 
-#region Icon
-
+        #region Icon
         private static Size ResizeIcon(Image Icon)
         {
             int newWidth, newHeight;
@@ -1905,8 +1921,7 @@
                 iconsErrorBrushes.Add("_trailingIcon", textureBrushRed);
             }
         }
-        
-#endregion
+        #endregion
 
         private void UpdateHeight()
         {
@@ -2020,5 +2035,14 @@
             }
         }
 
+        private void LeaveOnEnterKey_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                SendKeys.Send("{TAB}");
+            }
+        }
     }
 }
